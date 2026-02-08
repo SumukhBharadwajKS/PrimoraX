@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PrimoraX — Launch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* --- your CSS unchanged --- */
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:'Inter',sans-serif;background:radial-gradient(ellipse at center,#0a1628 0%,#000 100%);color:white;overflow-x:hidden;position:relative;line-height:1.6;}
+
+.video-background{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;object-fit:cover;opacity:.25;filter:brightness(.7) contrast(1.2);}
+.content-wrapper{position:relative;z-index:1;min-height:100vh;}
+
+header{text-align:center;padding:80px 20px 60px;animation:fadeIn 1.5s ease;}
+header h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(42px,8vw,72px);background:linear-gradient(135deg,#fff,#38bdf8,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.tagline{color:#94a3b8;margin-top:16px;font-size:clamp(16px,2.5vw,20px);}
+
+.hero{display:flex;align-items:center;justify-content:center;gap:60px;padding:80px 40px;flex-wrap:wrap;}
+.hero img{width:280px;height:280px;object-fit:cover;border-radius:20px;box-shadow:0 0 50px rgba(56,189,248,.4);}
+.hero div{max-width:500px;}
+
+.launch-counter{text-align:center;padding:100px 20px;}
+.counter-grid{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;}
+
+.time-box{background:rgba(56,189,248,.1);border-radius:20px;padding:30px 25px;min-width:120px;border:1px solid rgba(56,189,248,.2);}
+.time-box span{font-size:48px;color:#38bdf8;}
+.flip{transform:scale(1.2);}
+
+.vision{padding:100px 20px;text-align:center;}
+footer{text-align:center;padding:40px 20px;color:#64748b;}
+
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+</style>
+</head>
+
+<body>
+
+<!-- ✅ renamed video file -->
+<video class="video-background" autoplay loop muted playsinline preload="auto">
+  <source src="bg.webm" type="video/webm">
+</video>
+
+<div class="content-wrapper">
+
+<header>
+<h1>PrimoraX</h1>
+<p class="tagline">Engineering tomorrow’s ideas</p>
+</header>
+
+<section class="hero">
+
+<!-- ✅ renamed image file -->
+<img src="profile.jpg" alt="Founder Photo">
+
+<div>
+<h2>Founder & CEO</h2>
+<p>
+Welcome to PrimoraX — a digital innovation lab building prototypes,
+exploring new ideas, and shaping future technology.
+</p>
+</div>
+</section>
+
+<section class="launch-counter">
+<h2>Launch Countdown</h2>
+
+<div class="counter-grid">
+<div class="time-box"><span id="days">00</span><p>Days</p></div>
+<div class="time-box"><span id="hours">00</span><p>Hours</p></div>
+<div class="time-box"><span id="minutes">00</span><p>Minutes</p></div>
+<div class="time-box"><span id="seconds">00</span><p>Seconds</p></div>
+</div>
+
+<p id="launchMessage"></p>
+</section>
+
+<section class="vision">
+<h2>PrimoraX Vision</h2>
+<p>
+PrimoraX exists to prototype bold ideas, push creative boundaries,
+and turn imagination into working technology.
+</p>
+</section>
+
+<footer>
+© 2026 PrimoraX — Founder Launch
+</footer>
+
+</div>
+
+<script>
+
+const launchDate = new Date("March 6, 2026 00:00:00").getTime();
+
+function animateFlip(id,value){
+const el=document.getElementById(id);
+if(el.textContent!==value){
+el.classList.add("flip");
+setTimeout(()=>{el.textContent=value;el.classList.remove("flip");},200);
+}
+}
+
+setInterval(()=>{
+const now=new Date().getTime();
+const distance=launchDate-now;
+
+if(distance<0){
+document.getElementById("launchMessage").innerHTML="🚀 PrimoraX is LIVE!";
+return;
+}
+
+const d=Math.floor(distance/(1000*60*60*24));
+const h=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+const m=Math.floor((distance%(1000*60*60))/(1000*60));
+const s=Math.floor((distance%(1000*60))/1000);
+
+animateFlip("days",d.toString().padStart(2,"0"));
+animateFlip("hours",h.toString().padStart(2,"0"));
+animateFlip("minutes",m.toString().padStart(2,"0"));
+animateFlip("seconds",s.toString().padStart(2,"0"));
+
+},1000);
+
+</script>
+
+</body>
+</html>
