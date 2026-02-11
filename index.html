@@ -3,1134 +3,1617 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PrimoraX — Launch</title>
+<title>PrimoraX | Electronics Innovation Lab</title>
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%2300ffaa'/%3E%3Cstop offset='100%25' style='stop-color:%2338bdf8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M50 10 L80 30 L80 70 L50 90 L20 70 L20 30 Z' fill='none' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='50' cy='50' r='15' fill='url(%23g)'/%3E%3Cpath d='M50 35 L50 20 M50 65 L50 80 M35 50 L20 50 M65 50 L80 50' stroke='url(%23g)' stroke-width='2'/%3E%3C/svg%3E">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #000;
+  color: white;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* Animated background */
+.bg-gradient {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  background: radial-gradient(ellipse at 20% 30%, rgba(0,255,170,.15) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 70%, rgba(56,189,248,.15) 0%, transparent 50%);
+}
+
+.grid-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background-image: 
+    linear-gradient(rgba(0,255,170,.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,170,.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: gridMove 20s linear infinite;
+}
+
+@keyframes gridMove {
+  0% { background-position: 0 0; }
+  100% { background-position: 50px 50px; }
+}
+
+/* Navigation */
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: rgba(0,0,0,.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0,255,170,.1);
+  padding: 1rem 2rem;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+nav.scrolled {
+  background: rgba(0,0,0,.95);
+  border-bottom-color: rgba(0,255,170,.3);
+  box-shadow: 0 5px 30px rgba(0,255,170,.1);
+}
+
+.nav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.logo:hover {
+  transform: translateY(-2px);
+}
+
+.logo svg {
+  width: 40px;
+  height: 40px;
+  filter: drop-shadow(0 0 10px rgba(0,255,170,.6));
+}
+
+.logo-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #fff 0%, #00ffaa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: #94a3b8;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #00ffaa, #38bdf8);
+  transition: width 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: #00ffaa;
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+/* Hero Section */
+.hero-section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 120px 2rem 80px;
+  position: relative;
+}
+
+.hero-content {
+  max-width: 1200px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.hero-text h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(48px, 8vw, 72px);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, #fff 0%, #00ffaa 50%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% auto;
+  animation: gradientFlow 3s linear infinite;
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+.hero-text .subtitle {
+  font-size: 20px;
+  color: #64748b;
+  margin-bottom: 2rem;
+  font-weight: 300;
+}
+
+.founder-badge {
+  display: inline-block;
+  background: rgba(0,255,170,.1);
+  border: 1px solid rgba(0,255,170,.3);
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #00ffaa;
+  margin-bottom: 1rem;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.cta-button {
+  display: inline-block;
+  background: linear-gradient(135deg, #00ffaa, #38bdf8);
+  color: #000;
+  padding: 14px 32px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 20px rgba(0,255,170,.3);
+  margin-top: 1rem;
+}
+
+.cta-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0,255,170,.5);
+}
+
+.hero-visual {
+  position: relative;
+  perspective: 1000px;
+}
+
+.hero-image-container {
+  position: relative;
+  animation: float 6s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+
+.hero-image-container:hover {
+  animation-play-state: paused;
+  transform: translateY(-10px) rotateY(5deg);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+.hero-image-container::before {
+  content: '';
+  position: absolute;
+  top: -25px;
+  left: -25px;
+  right: -25px;
+  bottom: -25px;
+  background: linear-gradient(135deg, #00ffaa, #38bdf8);
+  border-radius: 24px;
+  filter: blur(30px);
+  opacity: 0.5;
+  animation: pulse 3s ease-in-out infinite;
+  z-index: -1;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.05); }
+}
+
+.hero-image-container img {
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 20px;
+  border: 2px solid rgba(0,255,170,0.3);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(0,255,170,0.2);
+  transition: all 0.3s ease;
+  display: block;
+}
+
+.hero-image-container img:hover {
+  transform: scale(1.05) rotate(2deg);
+  border-color: rgba(0,255,170,0.8);
+  box-shadow: 0 25px 70px rgba(0,0,0,0.6), 0 0 60px rgba(0,255,170,0.5);
+}
+
+.corner-marker {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #00ffaa;
+  z-index: 2;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.corner-marker::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #00ffaa;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  box-shadow: 0 0 15px #00ffaa;
+}
+
+.corner-marker:hover {
+  border-color: #38bdf8;
+  box-shadow: 0 0 20px rgba(0,255,170,0.8);
+  transform: scale(1.2);
+}
+
+.corner-marker:hover::after {
+  opacity: 1;
+}
+
+.corner-marker.top-left {
+  top: -10px;
+  left: -10px;
+  border-right: none;
+  border-bottom: none;
+  border-radius: 4px 0 0 0;
+}
+
+.corner-marker.top-left::after {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.corner-marker.top-right {
+  top: -10px;
+  right: -10px;
+  border-left: none;
+  border-bottom: none;
+  border-radius: 0 4px 0 0;
+}
+
+.corner-marker.top-right::after {
+  top: 50%;
+  right: 50%;
+  transform: translate(50%, -50%);
+}
+
+.corner-marker.bottom-left {
+  bottom: -10px;
+  left: -10px;
+  border-right: none;
+  border-top: none;
+  border-radius: 0 0 0 4px;
+}
+
+.corner-marker.bottom-left::after {
+  bottom: 50%;
+  left: 50%;
+  transform: translate(-50%, 50%);
+}
+
+.corner-marker.bottom-right {
+  bottom: -10px;
+  right: -10px;
+  border-left: none;
+  border-top: none;
+  border-radius: 0 0 4px 0;
+}
+
+.corner-marker.bottom-right::after {
+  bottom: 50%;
+  right: 50%;
+  transform: translate(50%, 50%);
+}
+
+/* Projects Section */
+.projects-section {
+  padding: 100px 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.section-title {
+  text-align: center;
+  font-size: clamp(36px, 6vw, 56px);
+  font-weight: 700;
+  margin-bottom: 3rem;
+  background: linear-gradient(135deg, #fff, #00ffaa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.project-card {
+  background: rgba(5,15,25,.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0,255,170,.2);
+  border-radius: 20px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.project-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #00ffaa, #38bdf8);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(0,255,170,.5);
+  box-shadow: 0 15px 40px rgba(0,255,170,.2);
+}
+
+.project-card:hover::before {
+  opacity: 1;
+}
+
+.project-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.project-icon {
+  width: 50px;
+  height: 50px;
+  background: rgba(0,255,170,.1);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.project-card h3 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.project-card p {
+  color: #94a3b8;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.project-demo {
+  background: rgba(0,0,0,.4);
+  border: 1px solid rgba(0,255,170,.15);
+  border-radius: 12px;
+  padding: 2rem;
+  min-height: 250px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tech-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.tech-tag {
+  background: rgba(56,189,248,.1);
+  color: #38bdf8;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* LED Circuit Demo */
+.led-circuit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.breadboard {
+  width: 100%;
+  max-width: 300px;
+  height: 180px;
+  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+  border-radius: 8px;
+  padding: 1.5rem;
+  position: relative;
+  border: 2px solid rgba(0,255,170,.2);
+}
+
+.led {
+  width: 20px;
+  height: 30px;
+  background: #333;
+  border-radius: 10px 10px 0 0;
+  margin: 0 auto;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.led::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 14px;
+  background: #444;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
 
-*{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-
-body{
-margin:0;
-font-family:'Inter',sans-serif;
-background:#000;
-color:white;
-overflow-x:hidden;
-line-height:1.6;
-}
-
-/* Circuit board background */
-.circuit-bg{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-z-index:-2;
-background:#000;
-}
-
-.circuit-bg::before{
-content:'';
-position:absolute;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background-image:
-linear-gradient(rgba(0,255,170,.02) 1px,transparent 1px),
-linear-gradient(90deg,rgba(0,255,170,.02) 1px,transparent 1px);
-background-size:50px 50px;
-animation:gridScroll 20s linear infinite;
-}
-
-@keyframes gridScroll{
-0%{background-position:0 0;}
-100%{background-position:50px 50px;}
-}
-
-/* Animated gradient background */
-.gradient-bg{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-z-index:-2;
-background:
-radial-gradient(ellipse at 20% 30%,rgba(0,255,170,.15) 0%,transparent 50%),
-radial-gradient(ellipse at 80% 70%,rgba(56,189,248,.15) 0%,transparent 50%),
-radial-gradient(ellipse at 50% 50%,rgba(139,92,246,.1) 0%,transparent 50%);
-animation:gradientShift 15s ease infinite;
-}
-
-@keyframes gradientShift{
-0%,100%{opacity:1;}
-50%{opacity:.7;}
-}
-
-/* Oscilloscope wave canvas */
-#oscilloscope{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-z-index:-1;
-opacity:.3;
-}
-
-/* Particle canvas */
-#particles{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-z-index:-1;
-}
-
-.video-background{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-z-index:-1;
-object-fit:cover;
-opacity:.1;
-filter:brightness(.5) contrast(1.3) hue-rotate(200deg);
-mix-blend-mode:screen;
-}
-
-.content-wrapper{
-position:relative;
-z-index:1;
-min-height:100vh;
-}
+.led.on::before {
+  background: #00ffaa;
+  box-shadow: 0 0 20px #00ffaa, 0 0 40px rgba(0,255,170,.5);
+}
 
-/* Circuit board decorative elements */
-.circuit-line{
-position:absolute;
-height:2px;
-background:linear-gradient(90deg,transparent,#00ffaa,transparent);
-opacity:.3;
-animation:lineGlow 3s ease-in-out infinite;
-cursor:pointer;
-transition:all .3s ease;
+.led.on {
+  background: linear-gradient(135deg, #00ffaa, #00dd88);
 }
 
-.circuit-line:hover{
-opacity:.8;
-height:3px;
-background:linear-gradient(90deg,transparent,#38bdf8,transparent);
-box-shadow:0 0 20px rgba(56,189,248,.8);
-animation:none;
+.circuit-wires {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
 }
-
-@keyframes lineGlow{
-0%,100%{opacity:.3;}
-50%{opacity:.6;}
-}
-
-.circuit-node{
-position:absolute;
-width:8px;
-height:8px;
-background:#00ffaa;
-border-radius:50%;
-box-shadow:0 0 10px #00ffaa;
-animation:nodePulse 2s ease-in-out infinite;
-cursor:pointer;
-transition:all .3s ease;
-}
 
-.circuit-node:hover{
-width:16px;
-height:16px;
-background:#38bdf8;
-box-shadow:0 0 30px #38bdf8,0 0 60px rgba(56,189,248,.5);
-animation:none;
-transform:scale(1);
-}
-
-@keyframes nodePulse{
-0%,100%{transform:scale(1);opacity:.6;}
-50%{transform:scale(1.3);opacity:1;}
-}
+.wire {
+  width: 3px;
+  height: 60px;
+  border-radius: 2px;
+}
 
-/* Glassmorphism with circuit accent */
-.glass{
-background:rgba(5,15,25,.6);
-backdrop-filter:blur(20px);
-border:1px solid rgba(0,255,170,.2);
-border-radius:24px;
-box-shadow:0 8px 32px rgba(0,0,0,.3),inset 0 0 20px rgba(0,255,170,.05);
-position:relative;
-overflow:hidden;
-}
-
-.glass::before{
-content:'';
-position:absolute;
-top:-2px;
-left:-2px;
-right:-2px;
-bottom:-2px;
-background:linear-gradient(45deg,#00ffaa,#38bdf8,#8b5cf6);
-border-radius:24px;
-z-index:-1;
-opacity:0;
-transition:opacity .3s ease;
+.wire.power {
+  background: linear-gradient(180deg, #ff4444, #cc0000);
 }
-
-.glass:hover::before{
-opacity:.2;
-}
-
-header{
-text-align:center;
-padding:120px 20px 80px;
-animation:fadeInDown 1s ease;
-position:relative;
-}
-
-/* Circuit decorations in header */
-.circuit-line.header-line-1{
-top:40px;
-left:10%;
-width:200px;
-}
-
-.circuit-line.header-line-2{
-top:40px;
-right:10%;
-width:200px;
-}
-
-.circuit-node.header-node-1{
-top:39px;
-left:calc(10% + 200px);
-}
 
-.circuit-node.header-node-2{
-top:39px;
-right:calc(10% + 200px);
-}
-
-header h1{
-font-family:'Space Grotesk',sans-serif;
-font-size:clamp(48px,10vw,96px);
-font-weight:700;
-background:linear-gradient(135deg,#fff 0%,#00ffaa 50%,#38bdf8 100%);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-background-size:200% auto;
-animation:gradientFlow 3s linear infinite;
-letter-spacing:-2px;
-position:relative;
-filter:drop-shadow(0 0 30px rgba(0,255,170,.4));
-transition:all .3s ease;
-cursor:pointer;
-}
-
-header h1:hover{
-filter:drop-shadow(0 0 50px rgba(0,255,170,.8));
-transform:scale(1.02);
-letter-spacing:-1px;
+.wire.ground {
+  background: linear-gradient(180deg, #444, #000);
 }
-
-@keyframes gradientFlow{
-0%{background-position:0% center;}
-100%{background-position:200% center;}
+
+.wire.signal {
+  background: linear-gradient(180deg, #00ffaa, #00aa77);
 }
 
-header h1::after{
-content:'';
-position:absolute;
-bottom:-10px;
-left:50%;
-transform:translateX(-50%);
-width:120px;
-height:3px;
-background:linear-gradient(90deg,transparent,#00ffaa,transparent);
-border-radius:2px;
-box-shadow:0 0 10px #00ffaa;
-}
-
-.tagline{
-color:#94a3b8;
-margin-top:24px;
-font-size:clamp(18px,3vw,24px);
-font-weight:300;
-letter-spacing:.5px;
-transition:all .3s ease;
-cursor:pointer;
-position:relative;
-display:inline-block;
-}
-
-.tagline:hover{
-color:#cbd5e1;
-letter-spacing:1px;
-}
-
-.tagline:hover::after{
-content:'_';
-color:#00ffaa;
-animation:blink .8s step-start infinite;
-margin-left:4px;
-}
-
-.founder-name{
-margin-top:20px;
-font-weight:600;
-letter-spacing:1.5px;
-font-size:14px;
-text-transform:uppercase;
-color:#00ffaa;
-opacity:0;
-animation:founderReveal 1.5s ease forwards;
-animation-delay:.8s;
-text-shadow:0 0 20px rgba(0,255,170,.8);
-font-family:'JetBrains Mono',monospace;
-}
-
-.founder-name::before{
-content:'> ';
-color:#38bdf8;
-animation:blink 1s step-start infinite;
-}
-
-@keyframes blink{
-0%,100%{opacity:1;}
-50%{opacity:0;}
-}
-
-@keyframes founderReveal{
-from{opacity:0;transform:translateY(15px);}
-to{opacity:1;transform:translateY(0);}
-}
-
-.hero{
-display:flex;
-align-items:center;
-justify-content:center;
-gap:80px;
-padding:80px 40px;
-flex-wrap:wrap;
-animation:fadeIn 1.2s ease .3s both;
-max-width:1200px;
-margin:0 auto;
-position:relative;
-}
-
-.hero-image-container{
-position:relative;
-animation:float 6s ease-in-out infinite;
-transition:transform .3s ease;
-transform-style:preserve-3d;
-perspective:1000px;
-}
-
-.hero-image-container:hover{
-animation-play-state:paused;
-transform:translateY(-10px) rotateY(5deg) rotateX(5deg);
-}
-
-@keyframes float{
-0%,100%{transform:translateY(0px);}
-50%{transform:translateY(-20px);}
-}
-
-/* Hexagonal circuit frame around image */
-.hero-image-container::before{
-content:'';
-position:absolute;
-top:-25px;
-left:-25px;
-right:-25px;
-bottom:-25px;
-background:linear-gradient(135deg,#00ffaa,#38bdf8);
-border-radius:24px;
-filter:blur(30px);
-opacity:.5;
-animation:pulse 3s ease-in-out infinite;
-z-index:-1;
+.control-button {
+  padding: 10px 24px;
+  background: rgba(0,255,170,.2);
+  border: 1px solid #00ffaa;
+  border-radius: 8px;
+  color: #00ffaa;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
 }
 
-.hero-image-container::after{
-content:'';
-position:absolute;
-top:-15px;
-left:-15px;
-right:-15px;
-bottom:-15px;
-border:2px solid #00ffaa;
-border-radius:24px;
-opacity:.4;
-animation:borderRotate 8s linear infinite;
+.control-button:hover {
+  background: rgba(0,255,170,.3);
+  box-shadow: 0 0 20px rgba(0,255,170,.4);
 }
 
-@keyframes borderRotate{
-0%{transform:rotate(0deg);}
-100%{transform:rotate(360deg);}
-}
-
-@keyframes pulse{
-0%,100%{opacity:.5;transform:scale(1);}
-50%{opacity:.7;transform:scale(1.05);}
+.control-button:active {
+  transform: scale(0.95);
 }
 
-.hero img{
-width:300px;
-height:300px;
-object-fit:cover;
-border-radius:20px;
-border:2px solid rgba(0,255,170,.3);
-box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 40px rgba(0,255,170,.2);
-transition:transform .3s ease;
-position:relative;
-z-index:1;
-}
+/* Oscilloscope Demo */
+.oscilloscope {
+  width: 100%;
+  height: 200px;
+  background: #0a0a0a;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid rgba(0,255,170,.3);
+}
 
-.hero img:hover{
-transform:scale(1.08) rotate(3deg);
-border-color:rgba(0,255,170,.8);
-box-shadow:0 25px 70px rgba(0,0,0,.6),0 0 60px rgba(0,255,170,.5);
-filter:brightness(1.1);
+.osc-grid {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(0,255,170,.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,170,.1) 1px, transparent 1px);
+  background-size: 20px 20px;
 }
 
-.hero img{
-cursor:pointer;
+.osc-canvas {
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 
-/* Corner circuit markers on image */
-.corner-marker{
-position:absolute;
-width:20px;
-height:20px;
-border:2px solid #00ffaa;
-z-index:2;
-transition:all .3s ease;
-cursor:pointer;
+.osc-controls {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
-.corner-marker::after{
-content:'';
-position:absolute;
-width:6px;
-height:6px;
-background:#00ffaa;
-border-radius:50%;
-opacity:0;
-transition:opacity .3s ease;
-box-shadow:0 0 15px #00ffaa;
-}
-
-.corner-marker:hover{
-border-color:#38bdf8;
-box-shadow:0 0 20px rgba(0,255,170,.8);
-transform:scale(1.2);
-}
-
-.corner-marker:hover::after{
-opacity:1;
-}
-
-.corner-marker.top-left::after{
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-}
-
-.corner-marker.top-right::after{
-top:50%;
-right:50%;
-transform:translate(50%,-50%);
-}
-
-.corner-marker.bottom-left::after{
-bottom:50%;
-left:50%;
-transform:translate(-50%,50%);
+.osc-control {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
 }
-
-.corner-marker.bottom-right::after{
-bottom:50%;
-right:50%;
-transform:translate(50%,50%);
-}
-
-.corner-marker.top-left{
-top:-10px;
-left:-10px;
-border-right:none;
-border-bottom:none;
-border-radius:4px 0 0 0;
-}
-
-.corner-marker.top-right{
-top:-10px;
-right:-10px;
-border-left:none;
-border-bottom:none;
-border-radius:0 4px 0 0;
-}
-
-.corner-marker.bottom-left{
-bottom:-10px;
-left:-10px;
-border-right:none;
-border-top:none;
-border-radius:0 0 0 4px;
-}
-
-.corner-marker.bottom-right{
-bottom:-10px;
-right:-10px;
-border-left:none;
-border-top:none;
-border-radius:0 0 4px 0;
-}
-
-.hero-content{
-max-width:520px;
-}
-
-.hero-content h2{
-font-size:clamp(28px,4vw,42px);
-margin-bottom:24px;
-line-height:1.2;
-font-weight:600;
-transition:all .3s ease;
-}
-
-.hero-content:hover h2{
-transform:translateX(5px);
-}
-
-.ece-badge{
-display:inline-block;
-background:rgba(0,255,170,.1);
-border:1px solid rgba(0,255,170,.3);
-padding:6px 16px;
-border-radius:20px;
-font-size:12px;
-font-weight:600;
-letter-spacing:1px;
-text-transform:uppercase;
-color:#00ffaa;
-margin-bottom:16px;
-font-family:'JetBrains Mono',monospace;
-cursor:pointer;
-transition:all .3s ease;
-position:relative;
-overflow:hidden;
-}
-
-.ece-badge::before{
-content:'';
-position:absolute;
-top:50%;
-left:50%;
-width:0;
-height:0;
-background:rgba(0,255,170,.2);
-border-radius:50%;
-transform:translate(-50%,-50%);
-transition:width .4s ease,height .4s ease;
-}
-
-.ece-badge:hover{
-background:rgba(0,255,170,.2);
-border-color:rgba(0,255,170,.6);
-box-shadow:0 0 30px rgba(0,255,170,.4);
-transform:scale(1.05);
-}
-
-.ece-badge:hover::before{
-width:200px;
-height:200px;
-}
-
-.founder-highlight{
-color:#00ffaa;
-text-shadow:0 0 30px rgba(0,255,170,.8);
-font-weight:700;
-position:relative;
-display:inline-block;
-cursor:pointer;
-transition:all .3s ease;
-}
-
-.founder-highlight::after{
-content:'';
-position:absolute;
-bottom:-4px;
-left:0;
-width:100%;
-height:2px;
-background:linear-gradient(90deg,#00ffaa,#38bdf8);
-box-shadow:0 0 8px #00ffaa;
-transition:all .3s ease;
-}
-
-.founder-highlight:hover{
-color:#38bdf8;
-text-shadow:0 0 40px rgba(56,189,248,1);
-transform:translateY(-2px);
-}
-
-.founder-highlight:hover::after{
-height:3px;
-box-shadow:0 0 15px #38bdf8;
-background:linear-gradient(90deg,#38bdf8,#00ffaa);
-}
-
-.hero-content p{
-font-size:18px;
-line-height:1.8;
-color:#cbd5e1;
-margin-top:20px;
-}
-
-.launch-counter{
-text-align:center;
-padding:120px 20px;
-max-width:900px;
-margin:0 auto;
-position:relative;
-}
-
-.launch-counter h2{
-font-size:clamp(32px,5vw,48px);
-margin-bottom:20px;
-font-weight:700;
-background:linear-gradient(135deg,#fff,#00ffaa);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-transition:all .3s ease;
-cursor:pointer;
-}
-
-.launch-counter h2:hover{
-transform:scale(1.05);
-filter:drop-shadow(0 0 20px rgba(0,255,170,.6));
-}
-
-.counter-subtitle{
-color:#64748b;
-font-size:14px;
-letter-spacing:2px;
-text-transform:uppercase;
-margin-bottom:60px;
-font-family:'JetBrains Mono',monospace;
-transition:all .3s ease;
-cursor:pointer;
-}
-
-.counter-subtitle:hover{
-color:#00ffaa;
-letter-spacing:3px;
-text-shadow:0 0 15px rgba(0,255,170,.6);
-}
-
-.counter-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-gap:24px;
-max-width:700px;
-margin:0 auto 40px;
-}
-
-.time-box{
-background:rgba(0,255,170,.05);
-backdrop-filter:blur(10px);
-border-radius:16px;
-padding:40px 20px;
-border:1px solid rgba(0,255,170,.2);
-position:relative;
-overflow:hidden;
-transition:all .3s ease;
-}
-
-/* Scanline effect */
-.time-box::before{
-content:'';
-position:absolute;
-top:-100%;
-left:0;
-width:100%;
-height:100%;
-background:linear-gradient(180deg,transparent,rgba(0,255,170,.2),transparent);
-animation:scanline 3s ease-in-out infinite;
-}
-
-@keyframes scanline{
-0%{top:-100%;}
-100%{top:100%;}
-}
-
-.time-box::after{
-content:'';
-position:absolute;
-bottom:0;
-left:0;
-width:100%;
-height:2px;
-background:linear-gradient(90deg,transparent,#00ffaa,transparent);
-opacity:0;
-transition:opacity .3s ease;
-}
-
-.time-box:hover::after{
-opacity:1;
-}
-
-.time-box:hover{
-transform:translateY(-5px);
-border-color:rgba(0,255,170,.5);
-box-shadow:0 10px 40px rgba(0,255,170,.3),inset 0 0 20px rgba(0,255,170,.1);
-background:rgba(0,255,170,.1);
-}
-
-.time-box span{
-display:block;
-font-size:56px;
-font-weight:700;
-color:#00ffaa;
-text-shadow:0 0 20px rgba(0,255,170,.6);
-font-family:'JetBrains Mono',monospace;
-transition:transform .2s ease;
-position:relative;
-z-index:1;
-}
-
-.time-box.flip span{
-transform:scale(1.15);
-}
-
-.time-box p{
-margin-top:8px;
-color:#94a3b8;
-text-transform:uppercase;
-font-size:11px;
-letter-spacing:2px;
-font-weight:600;
-font-family:'JetBrains Mono',monospace;
-position:relative;
-z-index:1;
-}
 
-#launchMessage{
-font-size:32px;
-margin-top:40px;
-font-weight:700;
-color:#00ffaa;
-text-shadow:0 0 30px rgba(0,255,170,.8);
-animation:glow 2s ease-in-out infinite;
-font-family:'Space Grotesk',sans-serif;
+.osc-control label {
+  font-size: 12px;
+  color: #64748b;
+  font-family: 'JetBrains Mono', monospace;
 }
 
-@keyframes glow{
-0%,100%{opacity:1;text-shadow:0 0 30px rgba(0,255,170,.8);}
-50%{opacity:.7;text-shadow:0 0 50px rgba(0,255,170,1);}
-}
-
-.vision{
-padding:120px 20px;
-text-align:center;
-max-width:800px;
-margin:0 auto;
-}
+.osc-control input[type="range"] {
+  width: 120px;
+  accent-color: #00ffaa;
+}
 
-.vision-card{
-padding:60px 40px;
-margin-top:40px;
-cursor:pointer;
-transition:all .4s ease;
-position:relative;
-}
+.osc-value {
+  font-size: 14px;
+  color: #00ffaa;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+}
 
-.vision-card::after{
-content:'';
-position:absolute;
-top:0;
-left:0;
-right:0;
-bottom:0;
-background:
-linear-gradient(90deg,transparent,rgba(0,255,170,.1),transparent),
-linear-gradient(0deg,transparent,rgba(56,189,248,.1),transparent);
-opacity:0;
-transition:opacity .4s ease;
-pointer-events:none;
-border-radius:24px;
+/* 555 Timer Demo */
+.timer-555 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
 }
 
-.vision-card:hover{
-transform:translateY(-8px);
-border-color:rgba(0,255,170,.4);
-box-shadow:0 20px 60px rgba(0,0,0,.4),0 0 40px rgba(0,255,170,.3);
+.ic-chip {
+  width: 120px;
+  height: 80px;
+  background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+  border-radius: 8px;
+  position: relative;
+  border: 2px solid rgba(0,255,170,.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.vision-card:hover::after{
-opacity:1;
+.ic-chip::before {
+  content: '555';
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 24px;
+  font-weight: 700;
+  color: #00ffaa;
 }
 
-.vision-card:hover::before{
-opacity:.3;
+.chip-pins {
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 
-.vision h2{
-font-size:clamp(32px,5vw,48px);
-margin-bottom:32px;
-font-weight:700;
-background:linear-gradient(135deg,#fff,#00ffaa);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-cursor:pointer;
-transition:all .3s ease;
+.pin {
+  position: absolute;
+  width: 15px;
+  height: 3px;
+  background: #666;
+  transition: all 0.3s ease;
 }
 
-.vision h2:hover{
-transform:scale(1.03);
-filter:drop-shadow(0 0 25px rgba(0,255,170,.7));
+.pin.active {
+  background: #00ffaa;
+  box-shadow: 0 0 10px #00ffaa;
 }
 
-.vision p{
-font-size:20px;
-line-height:1.8;
-color:#cbd5e1;
+.frequency-display {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 18px;
+  color: #00ffaa;
+  font-weight: 600;
 }
 
-/* Signal wave decoration */
-.signal-wave{
-margin:40px 0;
-height:60px;
-position:relative;
-overflow:hidden;
-cursor:pointer;
-transition:all .3s ease;
+/* Countdown Section */
+.countdown-section {
+  padding: 100px 2rem;
+  text-align: center;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
-.signal-wave:hover{
-height:80px;
+.countdown-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1.5rem;
+  max-width: 700px;
+  margin: 3rem auto;
 }
 
-.signal-wave:hover svg{
-filter:drop-shadow(0 0 10px rgba(0,255,170,.8));
+.time-box {
+  background: rgba(0,255,170,.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0,255,170,.2);
+  border-radius: 16px;
+  padding: 2rem 1rem;
+  transition: all 0.3s ease;
 }
 
-.signal-wave svg{
-width:100%;
-height:100%;
-transition:all .3s ease;
+.time-box:hover {
+  border-color: rgba(0,255,170,.5);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0,255,170,.2);
 }
 
-footer{
-text-align:center;
-padding:60px 20px;
-color:#64748b;
-border-top:1px solid rgba(0,255,170,.1);
-font-family:'JetBrains Mono',monospace;
-font-size:13px;
-transition:all .3s ease;
-cursor:pointer;
+.time-box span {
+  display: block;
+  font-size: 48px;
+  font-weight: 700;
+  color: #00ffaa;
+  font-family: 'JetBrains Mono', monospace;
 }
 
-footer:hover{
-color:#94a3b8;
-border-top-color:rgba(0,255,170,.3);
+.time-box p {
+  margin-top: 0.5rem;
+  color: #64748b;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-family: 'JetBrains Mono', monospace;
 }
 
-.footer-specs{
-margin-top:10px;
-font-size:11px;
-color:#475569;
-letter-spacing:1px;
-transition:all .3s ease;
+/* Footer */
+footer {
+  text-align: center;
+  padding: 4rem 2rem;
+  border-top: 1px solid rgba(0,255,170,.1);
+  color: #64748b;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
 }
 
-footer:hover .footer-specs{
-color:#00ffaa;
-text-shadow:0 0 10px rgba(0,255,170,.6);
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1rem;
 }
 
-@keyframes fadeIn{
-from{opacity:0;transform:translateY(30px);}
-to{opacity:1;transform:translateY(0);}
+.footer-links a {
+  color: #64748b;
+  text-decoration: none;
+  transition: all 0.3s ease;
 }
 
-@keyframes fadeInDown{
-from{opacity:0;transform:translateY(-30px);}
-to{opacity:1;transform:translateY(0);}
+.footer-links a:hover {
+  color: #00ffaa;
 }
 
 /* Responsive */
-@media(max-width:768px){
-.hero{gap:40px;padding:60px 20px;}
-.hero img{width:240px;height:240px;}
-.counter-grid{grid-template-columns:repeat(2,1fr);}
-.circuit-line{display:none;}
-.circuit-node{display:none;}
+@media (max-width: 968px) {
+  .hero-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  
+  .nav-links {
+    display: none;
+  }
+  
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .hero-image-container img {
+    width: 240px;
+    height: 240px;
+  }
 }
 
+/* Motor Controller Styles */
+.motor-container {
+  width: 120px;
+  height: 120px;
+  background: rgba(0,0,0,0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(0,255,170,0.3);
+}
+
+.motor {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+  border-radius: 50%;
+  position: relative;
+  border: 3px solid #00ffaa;
+  box-shadow: 0 0 20px rgba(0,255,170,0.3);
+}
+
+.motor-shaft {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 60px;
+  background: linear-gradient(180deg, #00ffaa, #38bdf8);
+  transform: translate(-50%, -50%);
+  transform-origin: center;
+  animation: rotate 2s linear infinite;
+  animation-play-state: paused;
+  border-radius: 2px;
+}
+
+.motor-shaft::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  background: #00ffaa;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #00ffaa;
+}
+
+@keyframes rotate {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.pwm-indicator {
+  width: 100%;
+  max-width: 300px;
+  height: 30px;
+  background: rgba(0,0,0,0.4);
+  border-radius: 8px;
+  border: 1px solid rgba(0,255,170,0.2);
+  overflow: hidden;
+  position: relative;
+}
+
+.pwm-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #00ffaa, #38bdf8);
+  width: 50%;
+  transition: width 0.3s ease;
+  box-shadow: 0 0 20px rgba(0,255,170,0.5);
+}
+
+/* Capacitor Styles */
+.capacitor-visual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.capacitor {
+  width: 100px;
+  height: 120px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.capacitor-plate {
+  width: 30px;
+  height: 100px;
+  background: linear-gradient(135deg, #444, #666);
+  border-radius: 4px;
+  border: 2px solid rgba(0,255,170,0.3);
+}
+
+.capacitor-charge {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0%;
+  background: linear-gradient(180deg, transparent, rgba(0,255,170,0.3));
+  transition: height 2s ease;
+  border-radius: 4px;
+}
+
+.voltage-display {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 24px;
+  font-weight: 700;
+  color: #00ffaa;
+  text-shadow: 0 0 10px rgba(0,255,170,0.6);
+}
+
+/* Transistor Styles */
+.transistor-container {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.transistor {
+  width: 80px;
+  height: 80px;
+  position: relative;
+}
+
+.transistor-symbol {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.base {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 3px;
+  background: #00ffaa;
+  box-shadow: 0 0 10px #00ffaa;
+}
+
+.collector {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  width: 3px;
+  height: 25px;
+  background: #38bdf8;
+  box-shadow: 0 0 10px #38bdf8;
+}
+
+.collector::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -5px;
+  width: 0;
+  height: 0;
+  border-left: 8px solid #38bdf8;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+}
+
+.emitter {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 3px;
+  height: 25px;
+  background: #ff4444;
+  box-shadow: 0 0 10px #ff4444;
+}
+
+.amp-canvas {
+  background: #0a0a0a;
+  border-radius: 8px;
+  border: 2px solid rgba(0,255,170,0.3);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.8s ease forwards;
+}
 </style>
 </head>
-
 <body>
 
-<!-- Circuit board background -->
-<div class="circuit-bg"></div>
+<!-- Background -->
+<div class="bg-gradient"></div>
+<div class="grid-bg"></div>
 
-<!-- Animated gradient background -->
-<div class="gradient-bg"></div>
+<!-- Navigation -->
+<nav id="navbar">
+  <div class="nav-container">
+    <a href="#" class="logo">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#00ffaa"/>
+            <stop offset="100%" style="stop-color:#38bdf8"/>
+          </linearGradient>
+        </defs>
+        <path d="M50 10 L80 30 L80 70 L50 90 L20 70 L20 30 Z" fill="none" stroke="url(#logoGradient)" stroke-width="3"/>
+        <circle cx="50" cy="50" r="15" fill="url(#logoGradient)"/>
+        <path d="M50 35 L50 20 M50 65 L50 80 M35 50 L20 50 M65 50 L80 50" stroke="url(#logoGradient)" stroke-width="2"/>
+      </svg>
+      <span class="logo-text">PrimoraX</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#launch">Launch</a></li>
+    </ul>
+  </div>
+</nav>
 
-<!-- Oscilloscope wave canvas -->
-<canvas id="oscilloscope"></canvas>
-
-<!-- Particle canvas -->
-<canvas id="particles"></canvas>
-
-<!-- Background video -->
-<video class="video-background" autoplay loop muted playsinline preload="auto">
-<source src="bg.webm" type="video/webm">
-</video>
-
-<div class="content-wrapper">
-
-<header>
-<!-- Circuit decorative lines -->
-<div class="circuit-line header-line-1"></div>
-<div class="circuit-line header-line-2"></div>
-<div class="circuit-node header-node-1"></div>
-<div class="circuit-node header-node-2"></div>
-
-<h1>PrimoraX</h1>
-<p class="tagline">Engineering tomorrow's ideas</p>
-</header>
-
-<section class="hero">
-
-<div class="hero-image-container">
-<div class="corner-marker top-left"></div>
-<div class="corner-marker top-right"></div>
-<div class="corner-marker bottom-left"></div>
-<div class="corner-marker bottom-right"></div>
-<img src="profile.jpg" alt="Founder Photo">
-</div>
-
-<div class="hero-content">
-<div class="ece-badge">⚡ Electronics & Communication Engineering Student</div>
-<h2>
-Founder & CEO —  
-<span class="founder-highlight">
-Sumukh Bharadwaj K S
-</span>
-</h2>
-
-<p>
-Welcome to PrimoraX — a digital innovation lab building prototypes,
-exploring new ideas, and shaping future technology through the lens of 
-electronics, signals, and systems.
-</p>
-</div>
-
+<!-- Hero Section -->
+<section class="hero-section" id="home">
+  <div class="hero-content">
+    <div class="hero-text fade-in">
+      <div class="founder-badge">⚡ ECE Student & Electronics Innovator</div>
+      <h1>Building the Future, One Circuit at a Time</h1>
+      <p class="subtitle">
+        Hi, I'm <strong style="color: #00ffaa;">Sumukh Bharadwaj K S</strong>, founder of PrimoraX. 
+        I design, prototype, and build innovative electronics projects that push creative boundaries.
+      </p>
+      <a href="#projects" class="cta-button">Explore My Projects →</a>
+    </div>
+    <div class="hero-visual fade-in">
+      <div class="hero-image-container">
+        <div class="corner-marker top-left"></div>
+        <div class="corner-marker top-right"></div>
+        <div class="corner-marker bottom-left"></div>
+        <div class="corner-marker bottom-right"></div>
+        <img src="profile.jpg" alt="Sumukh Bharadwaj K S - Founder" id="heroImage">
+      </div>
+    </div>
+  </div>
 </section>
 
-<section class="launch-counter">
-<h2>Launch Countdown</h2>
-<p class="counter-subtitle">System Initialization</p>
+<!-- Projects Section -->
+<section class="projects-section" id="projects">
+  <h2 class="section-title">Interactive Electronics Lab</h2>
+  
+  <div class="projects-grid">
+    
+    <!-- LED Blink Project -->
+    <div class="project-card">
+      <div class="project-header">
+        <div class="project-icon">💡</div>
+        <h3>LED Blink Controller</h3>
+      </div>
+      <p>Classic Arduino project: Control an LED's blink pattern using digital I/O. Click to toggle the LED on/off!</p>
+      
+      <div class="project-demo">
+        <div class="led-circuit">
+          <div class="breadboard">
+            <div class="led" id="led1"></div>
+            <div class="circuit-wires">
+              <div class="wire power"></div>
+              <div class="wire signal"></div>
+              <div class="wire ground"></div>
+            </div>
+          </div>
+          <button class="control-button" onclick="toggleLED()">Toggle LED</button>
+        </div>
+      </div>
+      
+      <div class="tech-tags">
+        <span class="tech-tag">Arduino</span>
+        <span class="tech-tag">C++</span>
+        <span class="tech-tag">Digital I/O</span>
+      </div>
+    </div>
 
-<div class="counter-grid">
-<div class="time-box"><span id="days">00</span><p>Days</p></div>
-<div class="time-box"><span id="hours">00</span><p>Hours</p></div>
-<div class="time-box"><span id="minutes">00</span><p>Minutes</p></div>
-<div class="time-box"><span id="seconds">00</span><p>Seconds</p></div>
-</div>
+    <!-- Oscilloscope Project -->
+    <div class="project-card">
+      <div class="project-header">
+        <div class="project-icon">📊</div>
+        <h3>Signal Oscilloscope</h3>
+      </div>
+      <p>Visualize analog waveforms in real-time. Adjust frequency and amplitude to see how signals behave.</p>
+      
+      <div class="project-demo">
+        <div class="oscilloscope">
+          <div class="osc-grid"></div>
+          <canvas class="osc-canvas" id="oscCanvas" width="400" height="200"></canvas>
+        </div>
+        <div class="osc-controls">
+          <div class="osc-control">
+            <label>Frequency</label>
+            <input type="range" id="freqSlider" min="1" max="10" value="2" step="0.5">
+            <span class="osc-value" id="freqValue">2 Hz</span>
+          </div>
+          <div class="osc-control">
+            <label>Amplitude</label>
+            <input type="range" id="ampSlider" min="10" max="80" value="40">
+            <span class="osc-value" id="ampValue">40</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tech-tags">
+        <span class="tech-tag">Signal Processing</span>
+        <span class="tech-tag">Analog</span>
+        <span class="tech-tag">Canvas</span>
+      </div>
+    </div>
 
-<p id="launchMessage"></p>
+    <!-- 555 Timer Project -->
+    <div class="project-card">
+      <div class="project-header">
+        <div class="project-icon">⏱️</div>
+        <h3>555 Timer Circuit</h3>
+      </div>
+      <p>Astable multivibrator using the classic 555 IC. Adjust timing components to change output frequency.</p>
+      
+      <div class="project-demo">
+        <div class="timer-555">
+          <div class="ic-chip">
+            <div class="chip-pins">
+              <div class="pin active" style="left: -7px; top: 10px;"></div>
+              <div class="pin active" style="left: -7px; top: 35px;"></div>
+              <div class="pin" style="left: -7px; bottom: 10px;"></div>
+              <div class="pin active" style="right: -7px; top: 10px;"></div>
+              <div class="pin" style="right: -7px; top: 35px;"></div>
+              <div class="pin active" style="right: -7px; bottom: 10px;"></div>
+            </div>
+          </div>
+          <div class="frequency-display" id="timerFreq">1.44 kHz</div>
+          <div class="osc-controls">
+            <div class="osc-control">
+              <label>R1 (kΩ)</label>
+              <input type="range" id="r1Slider" min="1" max="100" value="10">
+              <span class="osc-value" id="r1Value">10k</span>
+            </div>
+            <div class="osc-control">
+              <label>C1 (μF)</label>
+              <input type="range" id="c1Slider" min="1" max="100" value="10">
+              <span class="osc-value" id="c1Value">10μ</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tech-tags">
+        <span class="tech-tag">555 Timer</span>
+        <span class="tech-tag">Analog</span>
+        <span class="tech-tag">Timing Circuits</span>
+      </div>
+    </div>
+
+    <!-- PWM Motor Controller -->
+    <div class="project-card">
+      <div class="project-header">
+        <div class="project-icon">🔄</div>
+        <h3>PWM Motor Controller</h3>
+      </div>
+      <p>Control motor speed using Pulse Width Modulation. Adjust duty cycle to change rotational speed.</p>
+      
+      <div class="project-demo">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
+          <div class="motor-container">
+            <div class="motor" id="motor">
+              <div class="motor-shaft"></div>
+            </div>
+          </div>
+          <div class="pwm-indicator">
+            <div class="pwm-bar" id="pwmBar"></div>
+          </div>
+          <div class="osc-controls">
+            <div class="osc-control">
+              <label>Duty Cycle</label>
+              <input type="range" id="pwmSlider" min="0" max="100" value="50">
+              <span class="osc-value" id="pwmValue">50%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tech-tags">
+        <span class="tech-tag">PWM</span>
+        <span class="tech-tag">Motor Control</span>
+        <span class="tech-tag">Arduino</span>
+      </div>
+    </div>
+
+    <!-- Capacitor Charging -->
+    <div class="project-card">
+      <div class="project-header">
+        <div class="project-icon">⚡</div>
+        <h3>RC Charging Circuit</h3>
+      </div>
+      <p>Visualize capacitor charging through a resistor. See the exponential voltage rise characteristic.</p>
+      
+      <div class="project-demo">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
+          <div class="capacitor-visual">
+            <div class="capacitor" id="capacitor">
+              <div class="capacitor-plate left"></div>
+              <div class="capacitor-plate right"></div>
+              <div class="capacitor-charge" id="capCharge"></div>
+            </div>
+            <div class="voltage-display" id="capVoltage">0.0V</div>
+          </div>
+          <button class="control-button" onclick="chargeCapacitor()">Charge</button>
+          <button class="control-button" onclick="dischargeCapacitor()" style="background: rgba(255,68,68,0.2); border-color: #ff4444; color: #ff4444;">Discharge</button>
+        </div>
+      </div>
+      
+      <div class="tech-tags">
+        <span class="tech-tag">RC Circuit</span>
+        <span class="tech-tag">Capacitors</span>
+        <span class="tech-tag">Time Constant</span>
+      </div>
+    </div>
+
+    <!-- Transistor Amplifier -->
+    <div class="project-card">
+      <div class="project-header">
+        <div class="project-icon">📡</div>
+        <h3>Transistor Amplifier</h3>
+      </div>
+      <p>Common emitter amplifier circuit. Adjust input signal to see amplified output with phase inversion.</p>
+      
+      <div class="project-demo">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
+          <div class="transistor-container">
+            <div class="transistor">
+              <div class="transistor-symbol">
+                <div class="base"></div>
+                <div class="collector"></div>
+                <div class="emitter"></div>
+              </div>
+            </div>
+          </div>
+          <canvas class="amp-canvas" id="ampCanvas" width="350" height="150"></canvas>
+          <div class="osc-controls">
+            <div class="osc-control">
+              <label>Input Amplitude</label>
+              <input type="range" id="ampInputSlider" min="5" max="30" value="15">
+              <span class="osc-value" id="ampInputValue">15</span>
+            </div>
+            <div class="osc-control">
+              <label>Gain</label>
+              <input type="range" id="gainSlider" min="1" max="5" value="3" step="0.5">
+              <span class="osc-value" id="gainValue">3x</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tech-tags">
+        <span class="tech-tag">BJT</span>
+        <span class="tech-tag">Amplifier</span>
+        <span class="tech-tag">Signal Processing</span>
+      </div>
+    </div>
+
+  </div>
 </section>
 
-<section class="vision">
-<h2>PrimoraX Vision</h2>
-
-<!-- Signal wave decoration -->
-<div class="signal-wave">
-<svg viewBox="0 0 1200 60" preserveAspectRatio="none">
-<path d="M0,30 Q150,10 300,30 T600,30 T900,30 T1200,30" 
-stroke="rgba(0,255,170,0.3)" stroke-width="2" fill="none">
-<animate attributeName="d" 
-dur="3s" 
-repeatCount="indefinite"
-values="M0,30 Q150,10 300,30 T600,30 T900,30 T1200,30;
-M0,30 Q150,50 300,30 T600,30 T900,30 T1200,30;
-M0,30 Q150,10 300,30 T600,30 T900,30 T1200,30"/>
-</path>
-</svg>
-</div>
-
-<div class="vision-card glass">
-<p>
-PrimoraX exists to prototype bold ideas, push creative boundaries,
-and turn imagination into working technology. Where circuits meet code,
-and signals shape solutions.
-</p>
-</div>
+<!-- Countdown Section -->
+<section class="countdown-section" id="launch">
+  <h2 class="section-title">Official Launch Countdown</h2>
+  <p class="subtitle" style="text-align: center; color: #64748b; margin-bottom: 2rem;">
+    PrimoraX goes live on March 6, 2026
+  </p>
+  
+  <div class="countdown-grid">
+    <div class="time-box">
+      <span id="days">00</span>
+      <p>Days</p>
+    </div>
+    <div class="time-box">
+      <span id="hours">00</span>
+      <p>Hours</p>
+    </div>
+    <div class="time-box">
+      <span id="minutes">00</span>
+      <p>Minutes</p>
+    </div>
+    <div class="time-box">
+      <span id="seconds">00</span>
+      <p>Seconds</p>
+    </div>
+  </div>
+  
+  <p id="launchMessage" style="font-size: 24px; color: #00ffaa; font-weight: 600; margin-top: 2rem;"></p>
 </section>
 
+<!-- Vision Section -->
+<section class="vision-section" id="about">
+  <div style="max-width: 900px; margin: 0 auto; padding: 100px 2rem; text-align: center;">
+    <h2 class="section-title">PrimoraX Vision</h2>
+    
+    <!-- Signal wave decoration -->
+    <div style="margin: 40px 0; height: 60px; position: relative; overflow: hidden;">
+      <svg viewBox="0 0 1200 60" preserveAspectRatio="none" style="width: 100%; height: 100%;">
+        <path d="M0,30 Q150,10 300,30 T600,30 T900,30 T1200,30" 
+          stroke="rgba(0,255,170,0.3)" stroke-width="2" fill="none">
+          <animate attributeName="d" 
+            dur="3s" 
+            repeatCount="indefinite"
+            values="M0,30 Q150,10 300,30 T600,30 T900,30 T1200,30;
+                    M0,30 Q150,50 300,30 T600,30 T900,30 T1200,30;
+                    M0,30 Q150,10 300,30 T600,30 T900,30 T1200,30"/>
+        </path>
+      </svg>
+    </div>
+    
+    <div class="project-card" style="max-width: 800px; margin: 0 auto;">
+      <p style="font-size: 20px; line-height: 1.8; color: #cbd5e1;">
+        PrimoraX exists to prototype bold ideas, push creative boundaries,
+        and turn imagination into working technology. Where circuits meet code,
+        and signals shape solutions. This is where electronics innovation comes alive.
+      </p>
+      <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(0,255,170,0.2);">
+        <p style="color: #64748b; font-size: 16px; line-height: 1.6;">
+          As an ECE student, I'm passionate about bridging the gap between theoretical knowledge 
+          and practical implementation. Every project here represents hours of learning, 
+          experimentation, and the joy of seeing circuits come to life.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
 <footer>
-© 2026 PrimoraX — Founder Launch
-<div class="footer-specs">v1.0.0 | SYSTEM_ONLINE | FREQ: 3.6GHz</div>
+  <p>© 2026 PrimoraX | Founder: Sumukh Bharadwaj K S</p>
+  <div class="footer-links">
+    <a href="#home">Home</a>
+    <a href="#projects">Projects</a>
+    <a href="#about">About</a>
+  </div>
+  <p style="margin-top: 1rem; font-size: 11px; color: #475569;">
+    v2.0.0 | SYSTEM_ACTIVE | ECE Innovation Lab
+  </p>
 </footer>
 
-</div>
-
 <script>
+// Navbar scroll effect
+window.addEventListener('scroll', () => {
+  const navbar = document.getElementById('navbar');
+  if (window.scrollY > 50) {
+    navbar.classList.add('scrolled');
+  } else {
+    navbar.classList.remove('scrolled');
+  }
+});
 
-// Oscilloscope wave animation
-const oscCanvas=document.getElementById('oscilloscope');
-const oscCtx=oscCanvas.getContext('2d');
-oscCanvas.width=window.innerWidth;
-oscCanvas.height=window.innerHeight;
-
-let oscPhase=0;
-
-function drawOscilloscope(){
-oscCtx.clearRect(0,0,oscCanvas.width,oscCanvas.height);
-oscCtx.strokeStyle='rgba(0,255,170,0.2)';
-oscCtx.lineWidth=2;
-oscCtx.beginPath();
-for(let x=0;x<oscCanvas.width;x++){
-const y=oscCanvas.height/2+Math.sin((x+oscPhase)/50)*30*Math.sin(x/100);
-if(x===0)oscCtx.moveTo(x,y);
-else oscCtx.lineTo(x,y);
+// LED Toggle
+let ledOn = false;
+function toggleLED() {
+  ledOn = !ledOn;
+  const led = document.getElementById('led1');
+  if (ledOn) {
+    led.classList.add('on');
+  } else {
+    led.classList.remove('on');
+  }
 }
-oscCtx.stroke();
-oscPhase+=2;
-requestAnimationFrame(drawOscilloscope);
+
+// Auto-blink LED
+setInterval(() => {
+  if (!ledOn) {
+    toggleLED();
+    setTimeout(() => toggleLED(), 500);
+  }
+}, 2000);
+
+// Oscilloscope
+const oscCanvas = document.getElementById('oscCanvas');
+const oscCtx = oscCanvas.getContext('2d');
+let oscPhase = 0;
+let frequency = 2;
+let amplitude = 40;
+
+document.getElementById('freqSlider').addEventListener('input', (e) => {
+  frequency = parseFloat(e.target.value);
+  document.getElementById('freqValue').textContent = frequency + ' Hz';
+});
+
+document.getElementById('ampSlider').addEventListener('input', (e) => {
+  amplitude = parseInt(e.target.value);
+  document.getElementById('ampValue').textContent = amplitude;
+});
+
+function drawOscilloscope() {
+  oscCtx.clearRect(0, 0, 400, 200);
+  
+  oscCtx.strokeStyle = '#00ffaa';
+  oscCtx.lineWidth = 2;
+  oscCtx.beginPath();
+  
+  for (let x = 0; x < 400; x++) {
+    const y = 100 + Math.sin((x + oscPhase) * 0.02 * frequency) * amplitude;
+    if (x === 0) {
+      oscCtx.moveTo(x, y);
+    } else {
+      oscCtx.lineTo(x, y);
+    }
+  }
+  
+  oscCtx.stroke();
+  oscPhase += 2;
+  requestAnimationFrame(drawOscilloscope);
 }
 drawOscilloscope();
 
-// Particle animation (electrons)
-const canvas=document.getElementById('particles');
-const ctx=canvas.getContext('2d');
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
+// 555 Timer Calculator
+const r1Slider = document.getElementById('r1Slider');
+const c1Slider = document.getElementById('c1Slider');
 
-const particles=[];
-const particleCount=80;
-
-class Particle{
-constructor(){
-this.x=Math.random()*canvas.width;
-this.y=Math.random()*canvas.height;
-this.vx=(Math.random()-.5)*.8;
-this.vy=(Math.random()-.5)*.8;
-this.radius=Math.random()*1.5+.5;
-this.opacity=Math.random()*.4+.2;
-this.hue=Math.random()>0.5?170:200; // Green or cyan
-}
-update(){
-this.x+=this.vx;
-this.y+=this.vy;
-if(this.x<0||this.x>canvas.width)this.vx*=-1;
-if(this.y<0||this.y>canvas.height)this.vy*=-1;
-}
-draw(){
-ctx.beginPath();
-ctx.arc(this.x,this.y,this.radius,0,Math.PI*2);
-ctx.fillStyle=`hsla(${this.hue},100%,60%,${this.opacity})`;
-ctx.fill();
-// Glow effect
-ctx.shadowBlur=10;
-ctx.shadowColor=`hsla(${this.hue},100%,60%,${this.opacity})`;
-}
+function calculate555Frequency() {
+  const r1 = parseInt(r1Slider.value); // kΩ
+  const c1 = parseInt(c1Slider.value); // μF
+  
+  // f = 1.44 / ((R1 + 2*R2) * C)
+  // Simplified: assuming R2 = R1
+  const freq = 1.44 / ((r1 * 3) * c1 * 0.001); // Result in kHz
+  
+  document.getElementById('r1Value').textContent = r1 + 'k';
+  document.getElementById('c1Value').textContent = c1 + 'μ';
+  document.getElementById('timerFreq').textContent = freq.toFixed(2) + ' kHz';
 }
 
-for(let i=0;i<particleCount;i++){
-particles.push(new Particle());
-}
+r1Slider.addEventListener('input', calculate555Frequency);
+c1Slider.addEventListener('input', calculate555Frequency);
+calculate555Frequency();
 
-function connectParticles(){
-for(let i=0;i<particles.length;i++){
-for(let j=i+1;j<particles.length;j++){
-const dx=particles[i].x-particles[j].x;
-const dy=particles[i].y-particles[j].y;
-const dist=Math.sqrt(dx*dx+dy*dy);
-if(dist<120){
-ctx.beginPath();
-ctx.moveTo(particles[i].x,particles[i].y);
-ctx.lineTo(particles[j].x,particles[j].y);
-ctx.strokeStyle=`rgba(0,255,170,${.15*(1-dist/120)})`;
-ctx.lineWidth=1;
-ctx.stroke();
-}
-}
-}
-}
+// PWM Motor Controller
+const pwmSlider = document.getElementById('pwmSlider');
+const pwmBar = document.getElementById('pwmBar');
+const motorShaft = document.querySelector('.motor-shaft');
 
-function animateParticles(){
-ctx.clearRect(0,0,canvas.width,canvas.height);
-particles.forEach(p=>{
-p.update();
-p.draw();
-});
-connectParticles();
-requestAnimationFrame(animateParticles);
-}
-animateParticles();
-
-window.addEventListener('resize',()=>{
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
-oscCanvas.width=window.innerWidth;
-oscCanvas.height=window.innerHeight;
+pwmSlider.addEventListener('input', (e) => {
+  const dutyCycle = parseInt(e.target.value);
+  document.getElementById('pwmValue').textContent = dutyCycle + '%';
+  pwmBar.style.width = dutyCycle + '%';
+  
+  // Adjust motor speed
+  if (dutyCycle > 0) {
+    motorShaft.style.animationPlayState = 'running';
+    const speed = 2 / (dutyCycle / 100); // Faster at higher duty cycle
+    motorShaft.style.animationDuration = speed + 's';
+  } else {
+    motorShaft.style.animationPlayState = 'paused';
+  }
 });
 
-// Countdown timer
-const launchDate=new Date("March 6, 2026 00:00:00").getTime();
+// Initialize motor
+pwmSlider.dispatchEvent(new Event('input'));
 
-function animateFlip(id,value){
-const el=document.getElementById(id);
-if(el.textContent!==value){
-el.parentElement.classList.add("flip");
-setTimeout(()=>{
-el.textContent=value;
-el.parentElement.classList.remove("flip");
-},200);
+// Capacitor Charging Circuit
+let charging = false;
+let chargeLevel = 0;
+
+function chargeCapacitor() {
+  if (charging) return;
+  charging = true;
+  chargeLevel = 0;
+  
+  const chargeInterval = setInterval(() => {
+    if (chargeLevel >= 100) {
+      clearInterval(chargeInterval);
+      charging = false;
+      return;
+    }
+    
+    // Exponential charging curve
+    chargeLevel += (100 - chargeLevel) * 0.08;
+    document.getElementById('capCharge').style.height = chargeLevel + '%';
+    document.getElementById('capVoltage').textContent = (chargeLevel / 100 * 5).toFixed(1) + 'V';
+  }, 50);
 }
+
+function dischargeCapacitor() {
+  if (charging) return;
+  charging = true;
+  
+  const dischargeInterval = setInterval(() => {
+    if (chargeLevel <= 0) {
+      clearInterval(dischargeInterval);
+      charging = false;
+      chargeLevel = 0;
+      document.getElementById('capCharge').style.height = '0%';
+      document.getElementById('capVoltage').textContent = '0.0V';
+      return;
+    }
+    
+    // Exponential discharge
+    chargeLevel -= chargeLevel * 0.1;
+    document.getElementById('capCharge').style.height = chargeLevel + '%';
+    document.getElementById('capVoltage').textContent = (chargeLevel / 100 * 5).toFixed(1) + 'V';
+  }, 50);
 }
 
-setInterval(()=>{
-const now=new Date().getTime();
-const distance=launchDate-now;
+// Transistor Amplifier
+const ampCanvas = document.getElementById('ampCanvas');
+const ampCtx = ampCanvas.getContext('2d');
+let ampPhase = 0;
+let inputAmp = 15;
+let gain = 3;
 
-if(distance<0){
-document.getElementById("launchMessage").innerHTML="⚡ SYSTEM ONLINE — PrimoraX is LIVE!";
-return;
+document.getElementById('ampInputSlider').addEventListener('input', (e) => {
+  inputAmp = parseInt(e.target.value);
+  document.getElementById('ampInputValue').textContent = inputAmp;
+});
+
+document.getElementById('gainSlider').addEventListener('input', (e) => {
+  gain = parseFloat(e.target.value);
+  document.getElementById('gainValue').textContent = gain + 'x';
+});
+
+function drawAmplifier() {
+  ampCtx.clearRect(0, 0, 350, 150);
+  
+  // Draw input signal (top)
+  ampCtx.strokeStyle = '#38bdf8';
+  ampCtx.lineWidth = 2;
+  ampCtx.beginPath();
+  for (let x = 0; x < 350; x++) {
+    const y = 35 + Math.sin((x + ampPhase) * 0.05) * inputAmp;
+    if (x === 0) {
+      ampCtx.moveTo(x, y);
+    } else {
+      ampCtx.lineTo(x, y);
+    }
+  }
+  ampCtx.stroke();
+  
+  // Draw output signal (bottom, inverted and amplified)
+  ampCtx.strokeStyle = '#00ffaa';
+  ampCtx.lineWidth = 2;
+  ampCtx.beginPath();
+  for (let x = 0; x < 350; x++) {
+    const y = 115 - Math.sin((x + ampPhase) * 0.05) * inputAmp * gain;
+    if (x === 0) {
+      ampCtx.moveTo(x, y);
+    } else {
+      ampCtx.lineTo(x, y);
+    }
+  }
+  ampCtx.stroke();
+  
+  // Labels
+  ampCtx.fillStyle = '#64748b';
+  ampCtx.font = '11px JetBrains Mono';
+  ampCtx.fillText('Input', 5, 15);
+  ampCtx.fillText('Output (inverted)', 5, 95);
+  
+  ampPhase += 2;
+  requestAnimationFrame(drawAmplifier);
+}
+drawAmplifier();
+
+// Countdown Timer
+const launchDate = new Date("March 6, 2026 00:00:00").getTime();
+
+function updateCountdown() {
+  const now = new Date().getTime();
+  const distance = launchDate - now;
+  
+  if (distance < 0) {
+    document.getElementById("launchMessage").innerHTML = "⚡ SYSTEM ONLINE — PrimoraX is LIVE!";
+    return;
+  }
+  
+  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+  
+  document.getElementById("days").textContent = days.toString().padStart(2, "0");
+  document.getElementById("hours").textContent = hours.toString().padStart(2, "0");
+  document.getElementById("minutes").textContent = minutes.toString().padStart(2, "0");
+  document.getElementById("seconds").textContent = seconds.toString().padStart(2, "0");
 }
 
-const d=Math.floor(distance/(1000*60*60*24));
-const h=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
-const m=Math.floor((distance%(1000*60*60))/(1000*60));
-const s=Math.floor((distance%(1000*60))/1000);
+setInterval(updateCountdown, 1000);
+updateCountdown();
 
-animateFlip("days",d.toString().padStart(2,"0"));
-animateFlip("hours",h.toString().padStart(2,"0"));
-animateFlip("minutes",m.toString().padStart(2,"0"));
-animateFlip("seconds",s.toString().padStart(2,"0"));
-
-},1000);
-
+// Smooth scrolling for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
 </script>
 
 </body>
 </html>
-
